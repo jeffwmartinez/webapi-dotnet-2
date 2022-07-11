@@ -7,7 +7,18 @@ on:
   push:
     branches:
       - main
+
+    paths:
+    # Any change to code, infra as code and configuration
+    - "deploy/**"
+    - "services/**"
   workflow_dispatch:
+
+
+env:
+  PROJECT_PATH: './services/webapi/src/webapi.csproj'
+  TEST_PATH: './services/webapi/tests/'
+  OUTPUT_PATH: './output/webapi/'
 
 jobs:
   build:
@@ -19,20 +30,26 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
+          dotnet-version: 3.1.404
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Build
+        run: dotnet build ${{ env.PROJECT_PATH }}
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Test
+        run: dotnet test ${{ env.TEST_PATH }}
 
-      - name: Upload artifact for deployment job
+      - name: Publish
+        run: dotnet publish --no-build --output ${{ env.OUTPUT_PATH }} ${{ env.PROJECT_PATH }}
+
+      - name: Package webapi
+        run: (cd ${{ env.OUTPUT_PATH }} && zip -r ../../webapi.zip .)
+
+      - name: Upload application zip package
         uses: actions/upload-artifact@v2
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: webapi
+          path: ./webapi.zip
+          retention-days: 7
 
   deploy:
     runs-on: ubuntu-latest
