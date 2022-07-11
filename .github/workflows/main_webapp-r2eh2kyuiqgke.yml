@@ -12,6 +12,8 @@ on:
     # Any change to code, infra as code and configuration
     - "deploy/**"
     - "services/**"
+     # Changes to the workflow
+    - ".github/workflows/main_webapp-r2eh2kyuiqgke.yml"
   workflow_dispatch:
 
 
