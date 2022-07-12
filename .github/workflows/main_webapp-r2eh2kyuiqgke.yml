@@ -92,17 +92,17 @@ jobs:
       - name: Run installation script to deploy
         run: >
           deploy/scripts/install.sh
-          #--resource-name-prefix "${{fromJson(env.config).RESOURCE_NAME_PREFIX }}" 
-          #--environment-tag "${{fromJson(env.config).ENVIRONMENT_TAG }}" 
-          #--location "${{fromJson(env.config).AZURE_LOCATION }}" 
-          #--resource-group-tag "$GITHUB_REPOSITORY"
+          --resource-name-prefix "${{fromJson(env.config).RESOURCE_NAME_PREFIX }}" 
+          --environment-tag "${{fromJson(env.config).ENVIRONMENT_TAG }}" 
+          --location "${{fromJson(env.config).AZURE_LOCATION }}" 
+          --resource-group-tag "$GITHUB_REPOSITORY"
           --no-build
 
-      - name: deploy to azure web app
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'webapp-r2eh2kyuiqgke'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.azureappservice_publishprofile_cfea7c22c60349cc980da022d1bd3d4f }}
-          package: .
+      #- name: deploy to azure web app
+      #  id: deploy-to-webapp
+      #  uses: azure/webapps-deploy@v2
+      #  with:
+      #    app-name: 'webapp-r2eh2kyuiqgke'
+      #    slot-name: 'production'
+      #    publish-profile: ${{ secrets.azureappservice_publishprofile_cfea7c22c60349cc980da022d1bd3d4f }}
+      #    package: .
