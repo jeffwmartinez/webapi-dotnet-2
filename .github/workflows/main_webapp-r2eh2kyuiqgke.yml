@@ -74,6 +74,11 @@ jobs:
         run: |
           echo "config=$(yq e ./deploy/config.yaml -j -I=0)" >> $GITHUB_ENV
 
+      - name: Write deployment information to log
+        run: |
+          echo "Deploying to ${{fromJson(env.config).AZURE_LOCATION }} with name prefix ${{fromJson(env.config).ENVIRONMENT_TAG }}"
+
+
       - name: Download application artifacts
         uses: actions/download-artifact@v2
         with:
